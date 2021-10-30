@@ -25,7 +25,7 @@ impl Vector2F {
                 }
             )
         } else {
-            Err(())
+            Err(println!("Divided by zero!"))
         }
     }
     
