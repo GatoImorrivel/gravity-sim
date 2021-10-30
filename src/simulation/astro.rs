@@ -2,7 +2,7 @@ use ggez::{Context, graphics::{self, Mesh}};
 
 use super::Vector2F;
 
-#[derive(Clone, PartialEq, Debug)]
+#[derive(Clone, PartialEq)]
 pub struct Astro {
     mesh: graphics::Mesh,
     mass: f32,
@@ -21,8 +21,8 @@ impl Astro {
                     y: position.y,
                 },
                 mass * 0.5,
-                0.2,
-                graphics::Color::CYAN,
+                0.01,
+                graphics::Color::from_rgb(131, 126, 214),
             )
             .unwrap(),
             mass,
@@ -31,8 +31,8 @@ impl Astro {
         }
     }
 
-    pub fn set_velocity(&mut self, velocity: Vector2F) {
-        self.velocity = velocity;
+    pub fn add_velocity(&mut self, velocity: Vector2F) {
+        self.velocity += velocity;
     }
 
     pub fn set_position(&mut self, position: Vector2F) {

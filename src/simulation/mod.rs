@@ -1,24 +1,23 @@
 pub mod astro;
 
 use super::utils::vector2::Vector2F;
-use ggez::{Context, GameResult, event::EventHandler, graphics::{self, Color, DrawParam}};
+use ggez::{Context, GameResult, event::EventHandler, graphics::{self, Color}, input};
 
 use astro::Astro;
-use nalgebra::Point;
 
 pub struct Simulation {
     g_const: f32,
-    softening: f32,
     time_step: f32,
+    current_time_step: f32,
     astros: Vec<Astro>,
 }
 
 impl Simulation {
-    pub fn new(g_const: f32, softening: f32, time_step: f32) -> Self {
+    pub fn new(g_const: f32, time_step: f32) -> Self {
         Simulation {
             g_const,
-            softening,
             time_step,
+            current_time_step: time_step,
             astros: Vec::<Astro>::new(),
         }
     }
@@ -35,26 +34,27 @@ impl Simulation {
             let force_dir = (other_astro.position() - astro.position())
                 .normalized()
                 .expect("Divided by zero");
-
+            
             let acceleration = force_dir.multiplied_by(self.g_const * other_astro.mass() / dist);
-            velocity += acceleration.multiplied_by(self.time_step);
+
+            velocity += acceleration.multiplied_by(self.current_time_step);
         }
         return velocity
     }
 
     pub fn update_sim(&mut self) {
-        let mut velocity;
+        let mut velocity = Vector2F {x: 0.0, y: 0.0};
 
         for astro in 0..self.astros.len() {
-            velocity = Vector2F { x: 0.0, y: 0.0 };
             for other_astro in 0..self.astros.len() {
                 velocity += self.calculate_velocity(astro, other_astro);
             }
-            self.astros[astro].set_velocity(velocity);
+            self.astros[astro].add_velocity(velocity);
+            velocity = Vector2F {x: 0.0, y: 0.0};
         }
 
         for astro in self.astros.iter_mut() {
-            astro.set_position((astro.position() + astro.velocity()).multiplied_by(self.time_step));
+            astro.set_position(astro.position() + astro.velocity().multiplied_by(self.current_time_step));
         }
     }
 
@@ -64,12 +64,12 @@ impl Simulation {
 }
 
 impl EventHandler<ggez::GameError> for Simulation {
-    fn update(&mut self, ctx: &mut Context) -> GameResult<()> {
+    fn update(&mut self, _ctx: &mut Context) -> GameResult<()> {
         self.update_sim();
         Ok(())
     }
     fn draw(&mut self, ctx: &mut Context) -> GameResult<()> {
-        graphics::clear(ctx, Color::RED);
+        graphics::clear(ctx, Color::from_rgb(46, 52, 54));
         for astro in self.astros.iter() {
             graphics::draw(ctx, astro.mesh(), (
                     graphics::mint::Point2::<f32> {
@@ -80,5 +80,26 @@ impl EventHandler<ggez::GameError> for Simulation {
             )?;
         }   
         graphics::present(ctx)
+    }
+
+    fn key_up_event(&mut self, _ctx: &mut Context, _keycode: ggez::event::KeyCode, _keymods: ggez::event::KeyMods) {
+        match _keycode {
+            input::keyboard::KeyCode::P => {
+                self.current_time_step = if self.current_time_step == self.time_step {0.0} else {self.time_step}
+            },
+            input::keyboard::KeyCode::R => {
+                for _astro in 0..self.astros.len() {
+                    self.astros.pop();
+                }
+            },
+            _ => (),
+        }
+
+    }
+
+    fn mouse_button_up_event(&mut self, ctx: &mut Context, button: ggez::event::MouseButton, x_pos: f32, y_pos: f32) {
+        if button == input::mouse::MouseButton::Left {
+            self.add_astro(Astro::new(ctx, 50.0, Vector2F { x: (x_pos / 2.0), y: (y_pos / 2.0) }, Vector2F { x: (0.0), y: (0.0) }));
+        }
     }
 }
