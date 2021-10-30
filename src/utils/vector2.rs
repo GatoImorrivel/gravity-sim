@@ -7,6 +7,10 @@ pub struct Vector2F {
 }
 
 impl Vector2F {
+    pub fn new(x: f32, y: f32) -> Self {
+        Self {x,y}
+    }
+
     pub fn magnituded(&self) -> f32 {
         f32::sqrt(f32::powi(self.x, 2) + f32::powi(self.y, 2))
     }
