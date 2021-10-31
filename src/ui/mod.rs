@@ -6,7 +6,15 @@ use ggez::Context;
 use self::ui_element::UIElement;
 
 use super::utils::vector2;
-use crate::TIME_STEP;
+use crate::{TIME_STEP, WIN_HEIGHT, WIN_WIDTH};
+
+pub fn relative_width(pos: f32) -> f32 {
+    WIN_WIDTH * pos
+}
+
+pub fn relative_height(pos: f32) -> f32 {
+    WIN_HEIGHT * pos
+}
 
 pub enum SimulationCommands {
     Pause,
