@@ -1,7 +1,7 @@
 pub mod ui_element;
 pub mod ui_manager;
 
-use super::{WIN_WIDTH, WIN_HEIGHT, TIME_STEP, utils::vector2::Vector2F};
+use super::{utils::vector2::Vector2F, TIME_STEP, WIN_HEIGHT, WIN_WIDTH};
 
 pub enum SimulationCommands {
     Pause,
