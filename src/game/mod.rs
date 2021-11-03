@@ -2,12 +2,10 @@ use ggez::{graphics, input, Context, event::EventHandler, GameResult};
 use ggez::graphics::Color;
 
 use super::{
-    UIManager,
     TIME_STEP,
-    ui,
-    Simulation,
-    Astro,
-    Vector2F,
+    simulation::{astro::Astro, Simulation},
+    ui::{self, ui_manager::UIManager},
+    utils::vector2::Vector2F,
 };
 
 pub struct GameState {
