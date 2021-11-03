@@ -1,19 +1,20 @@
 use ggez::{graphics, input, Context, event::EventHandler, GameResult};
 use ggez::graphics::Color;
 
-use crate::ui::UIManager;
-use crate::simulation::{Simulation, astro::Astro};
-
-use super::ui;
-use super::simulation;
-use super::TIME_STEP;
-use super::Vector2F;
+use super::{
+    UIManager,
+    TIME_STEP,
+    ui,
+    Simulation,
+    Astro,
+    Vector2F,
+};
 
 pub struct GameState {
     is_paused: bool,
     time_step: f32,
-    simulation: simulation::Simulation,
-    ui_manager: ui::UIManager,
+    simulation: Simulation,
+    ui_manager: UIManager,
 }
 
 impl GameState {
@@ -52,6 +53,7 @@ impl EventHandler<ggez::GameError> for GameState {
                     return;
                 }
                 self.is_paused = !self.is_paused;
+                self.time_step = if self.is_paused == true {0.0} else {1.0};
                 self.ui_manager.update_simulation_info(
                     self.time_step,
                     if self.is_paused == true {

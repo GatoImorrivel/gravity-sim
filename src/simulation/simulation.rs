@@ -1,9 +1,9 @@
-pub mod astro;
-
 use ggez::{graphics, Context};
 
-use astro::Astro;
-use super::utils::vector2::Vector2F;
+use super::{
+    Vector2F,
+    Astro,
+};
 
 pub struct Simulation {
     g_const: f32,

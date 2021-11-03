@@ -5,8 +5,8 @@ pub mod utils;
 
 use ggez::{ContextBuilder, event};
 
-use game::GameState;
-use ui::{ui_element::UIElement, UIManager};
+use game::core::GameState;
+use ui::{ui_element::UIElement, ui_manager::UIManager};
 use utils::vector2::Vector2F;
 
 const G: f32 = 2.0;

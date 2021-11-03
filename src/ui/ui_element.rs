@@ -1,10 +1,7 @@
-use ggez::graphics::{self, DrawParam, PxScale, TextFragment};
+use ggez::Context;
+use ggez::graphics::{self, DrawParam, PxScale, TextFragment, Text};
 
-
-use super::Context;
-
-use super::Text;
-use super::vector2::Vector2F;
+use super::Vector2F;
 
 const ANTI_ALIASING: f32 = 4.0;
 
