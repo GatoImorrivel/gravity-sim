@@ -1,6 +1,9 @@
 # This is a NBody Simulation using Rust
 I made this just for fun
+<br>
+<br>
 
+# TODO
 - [x] - Functioning Program
     - [x] - Basic Simulation
     - [x] - Basic UI support
